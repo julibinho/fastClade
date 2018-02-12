@@ -29,47 +29,46 @@ int main(){
 
 std::unordered_map<std::string,std::set<std::uint32_t> > shingling_documents(std::string directoryPath){
   /***
-  * Retourne le dictionnaire contenant toutes les séquences des fichiers contenues dans le dossier associés avec leurs ensembles de set_shingles
-  * sous la forme d'entier de 32 bits.
+  * Return the map containing all the sequences in the directory associated with their set of shingles represented by 32-bits integers
   *
-  * directoryPath : Le chemin du dossier à analyser
+  * directoryPath : Path to the directory you want to analyze
   */
 
-  //On ajoute le / a la fin du path s'il n'existe pas.
+  //We add the / at the end of the path if it doesn't exist
   if((directoryPath.size() > 0) && directoryPath[directoryPath.size()-1] != '/'){
     directoryPath += '/';
   }
 
-  //on récupère la liste de tous nos fichiers dans notre dossier path
+  // We get all of the files name in our directory path
   std::vector<std::string> liste_fichiers = liste_fichiers_dossier(directoryPath); //Notre liste de fichiers à vérifier
 
-  //On ajoute le path au nom des fichiers obtenus pour avoir un path complet et nom juste les noms de fichiers.
+  //We add the path to the files name to have a valid path and not just files name.
   for(int i = 0; i<liste_fichiers.size(); i++){
     liste_fichiers[i] =  directoryPath + liste_fichiers[i];
   }
 
-  std::unordered_map<std::string,std::set<std::uint32_t> > resultat; //Notre résultat final
-  std::string nom; //La chaine qui va contenir l'identifiant de la séquence
-  std::string sequence; //La séquence que l'on doit annalyser
-  std::string line; //Notre conteneur temporaire de chaque ligne
-  std::ifstream myFile; //Notre flux vers chaque fichier.
-  
+  std::unordered_map<std::string,std::set<std::uint32_t> > resultat; //Our end result
+  std::string nom; //The string who contain the name of the sequence
+  std::string sequence; //The sequence we want to analyze
+  std::string line; //Our buffer for each line
+  std::ifstream myFile; //The flux to the file
+
   for(auto& file: liste_fichiers){
-    myFile.open(file); //On ouvre notre fichier
-    //Si on a réussi à accéder à notre fichier
+    myFile.open(file); //Opening the file
+    //If the file exists
     if(myFile.is_open()){
 
-      //On obtient le nom en regardant la première ligne
+      //We get the name by looking at the first line
       std::getline(myFile,line);
       nom = line.substr(1,line.size() - 1);
 
-      //On obtient la séquence en regardant toutes les autres lignes du fichier
+      // We get the sequence by looking at all the other lines in the file
       sequence = "";
       while(std::getline(myFile,line) && line.size() > 0){
         sequence += line.substr(0,line.size());
       }
 
-      //On insère le résultat dans notre dictionnaire
+      //We add the result in our map
       resultat.insert(std::pair<std::string,std::set<std::uint32_t> >(nom,shingling_a_document(sequence)));
 
       myFile.close();
@@ -81,32 +80,31 @@ std::unordered_map<std::string,std::set<std::uint32_t> > shingling_documents(std
 
 std::unordered_map<std::string,std::set<std::uint32_t> > shingling_long_document(std::string filePath){
   /***
-  * Retourne le dictionnaire contenant toutes les séquences du fichier associé avec leurs ensembles de set_shingles
-  * sous la forme d'entier de 32 bits.
+  * Return the map of all the sequences in the file with their shingles set represented by 32-bits integers
   *
-  * filePath : Le chemin du fichier à analyser
+  * filePath : The path to the file
   */
 
-  std::unordered_map<std::string,std::set<std::uint32_t> > result; //Notre dictionnaire final
-  std::string nom; //La chaine qui va contenir l'identifiant de la séquence
-  std::string sequence; //La séquence que l'on doit annalyser
-  std::set<std::uint32_t> set_shingles; //le set de Shingles que l'on récupère pour la séquence à analyser
-  std::string line; //Notre conteneur temporaire de chaque ligne
-  std::ifstream myFile(filePath); //Notre flux vers le fichier
+  std::unordered_map<std::string,std::set<std::uint32_t> > result; //Our final result
+  std::string nom; //The string who will contains the name of the sequence
+  std::string sequence; //The sequence to analyze
+  std::set<std::uint32_t> set_shingles; // The shingles set that we got from the sequence to analyze
+  std::string line; //Our buffer for each line
+  std::ifstream myFile(filePath); //Our flux to the file
 
-  //Si le fichier est ouvert
+  //If the file exist
   if(myFile.is_open()){
-    //On obtient le premier nom
+    //We get the first name
     std::getline(myFile,line);
     nom = line.substr(1,line.size()-1);
 
-    //On traite tous les éléments suivants
+    //We process all the other elements
     while(std::getline(myFile,line)){
-      //Si c'est une ligne de nom de séquence
+      //If it's a sequence name line
       if(line.substr(0,1).compare(">") == 0){
         set_shingles = shingling_a_document(sequence);
         result.insert(std::pair<std::string,std::set<std::uint32_t> >(nom,set_shingles));
-        //On obtient le prochain nom à utiliser
+        //We get the next name to use
         nom = line.substr(1,line.size()-1);
         sequence = "";
       }
@@ -115,7 +113,7 @@ std::unordered_map<std::string,std::set<std::uint32_t> > shingling_long_document
       }
     }
 
-    //On gère la dernière séquence
+    //We process the last sequence
     set_shingles = shingling_a_document(sequence);
     result.insert(std::pair<std::string,std::set<std::uint32_t> >(nom,set_shingles));
   }
@@ -126,19 +124,19 @@ std::unordered_map<std::string,std::set<std::uint32_t> > shingling_long_document
 
 std::set<std::uint32_t> shingling_a_document(std::string sequence){
   /***
-  * Retourne l'ensemble des shingles d'une chaine sous la forme d'entier de 32 bits
+  * Return a set of shingles represented by 32-bits integers
   *
-  * sequence : La chaine de caractère à transformer
+  * sequence : The string that we need to process
   */
   std::set<std::uint32_t> monSet;
   std::string shingleTmp = "";
   std::uint32_t crc_result;
-  //Pour toutes les combinaisons TAILLE_SHINGLE lettres dans la sequence
+  // For all the substring of TAILLE_SHINGLE character in the sequence
   for( int i = 0; i<sequence.size()-TAILLE_SHINGLES; i++){
-    //On construit notre shingle
+    //We build our shingle
     shingleTmp = sequence.substr(i,TAILLE_SHINGLES);
     const char * myString = shingleTmp.c_str();
-    //On passe notre shingle sous la forme d'un entier de 32 bit avec un CRC32
+    // We pass our shingle under a 32-bits integer with a CRC32
     crc_result = CRC::Calculate(myString, sizeof(myString), CRC::CRC_32());
 
     monSet.insert(crc_result);
@@ -149,10 +147,10 @@ std::set<std::uint32_t> shingling_a_document(std::string sequence){
 
 std::vector<std::string> liste_fichiers_dossier(std::string path){
   /***
-  * Donne la liste des fichiers dans un dossier (sous forme de string)
-  * /!\ Ne va pas chercher récursivement dans les sous dossiers du dossier initial
+  * Give the list of files in a directory
+  * /!\ Will not look recursivly !
   *
-  * path : Le cHemin du dossier dont il faut récupérer les fichiers.
+  * path : The path to the directory
   */
   const char *path_c = path.c_str();
   std::vector<std::string> liste_resultat;
