@@ -13,18 +13,18 @@
 #include<algorithm> //find in a vector
 #include<math.h> //pow function
 
-std::unordered_map<std::string,std::string> calculateAllComparisonsOnevsAll(std::unordered_map<std::string, std::vector<int> >, std::unordered_map<std::string, std::vector<int> >);
-std::pair<std::string,std::string> calculateComparisonsOnevsAll(std::unordered_map<std::string, std::vector<int> >, std::pair<std::string, std::vector<int> >);
+std::unordered_map<std::string,std::string> calculateAllComparisonsOnevsAll(std::unordered_map<std::string, std::vector<long> >, std::unordered_map<std::string, std::vector<long> >);
+std::pair<std::string,std::string> calculateComparisonsOnevsAll(std::unordered_map<std::string, std::vector<long> >, std::pair<std::string, std::vector<long> >);
 std::unordered_map<std::string,std::set<std::uint32_t> > shingling_documents(std::string);
 std::set<std::uint32_t> shingling_a_document(std::string);
 std::unordered_map<std::string,std::set<std::uint32_t> > shingling_long_document(std::string);
 std::vector<std::string> liste_fichiers_dossier(std::string);
 std::vector<int> pickRandomCoeffs(int);
-std::vector<int> minHashSignature(std::set<std::uint32_t>, std::vector<int>, std::vector<int>);
-std::unordered_map<std::string, std::vector<int> > minHashSignatures(std::unordered_map<std::string, std::set<std::uint32_t> >,std::vector<int>,std::vector<int>);
+std::vector<long> minHashSignature(std::set<std::uint32_t>, std::vector<int>, std::vector<int>);
+std::unordered_map<std::string, std::vector<long> > minHashSignatures(std::unordered_map<std::string, std::set<std::uint32_t> >,std::vector<int>,std::vector<int>);
 std::unordered_map<std::string, std::unordered_map<std::string, float> > calculateComparisonsAllvsAll (std::unordered_map<std::string, std::vector<int> >);
 
-static const int TAILLE_SHINGLES = 3;
+static const int TAILLE_SHINGLES = 4;
 static const int NOMBRES_HASH = 20;
 static const float THRESHOLD = 0.4;
 
@@ -43,8 +43,8 @@ int main(){
   t2 = clock();
   std::vector<int> coeffA = pickRandomCoeffs(NOMBRES_HASH);
   std::vector<int> coeffB = pickRandomCoeffs(NOMBRES_HASH);
-  std::unordered_map<std::string, std::vector<int> > train_signatures = minHashSignatures(shinglesTrain,coeffA,coeffB);
-  std::unordered_map<std::string, std::vector<int> > test_signatures = minHashSignatures(shinglesTest,coeffA,coeffB);
+  std::unordered_map<std::string, std::vector<long> > train_signatures = minHashSignatures(shinglesTrain,coeffA,coeffB);
+  std::unordered_map<std::string, std::vector<long> > test_signatures = minHashSignatures(shinglesTest,coeffA,coeffB);
   t2 = clock() - t2;
   printf("I just finished the minHash signatures operation, took me : %f seconds\n", ((float)t2)/CLOCKS_PER_SEC);
   printf("Total time elapsed : %f seconds\n", (float(t+t2)/CLOCKS_PER_SEC));
@@ -68,37 +68,10 @@ int main(){
   }
   std::cout << "Nombres de Resultats possibles trouvés : " << countRes <<"\nNombres totals de sequences testées : " << countTot << std::endl;
 
-
-  //std::unordered_map<std::string, std::unordered_map<std::string, float> >::iterator it1 = res_comparaisons.begin();
-  //std::unordered_map<std::string, float>::iterator it2;
-
-  //int count = 0;
-  //for (int i = 0; i < res_comparaisons.size();i++){
-  //  it2 = (*it1).second.begin();
-  //  for(int j = 0;j<(*it1).second.size();j++){
-  //     if ((*it2).second >= THRESHOLD){
-  //       count ++;
-  //       std::cout << (*it1).first << "\t" << (*it2).second << "\t" << (*it2).first <<std::endl;
-  //     }
-  //     it2++;
-  //   }
-  //   it1++;
-  // }
-  // printf("\nNombres de comparaisons qui depasse le seuil : %i\n",count);
-  // std::unordered_map<std::string, std::vector<int> >::iterator it = res_signature.begin();
-  // for(int j = 0; j < res_signature.size(); j++){
-  //   std::cout << (*it).first << std::endl;
-  //   for(int i = 0; i < (*it).second.size(); i++){
-  //     std::cout << (*it).second[i] << " , ";
-  //   }
-  //   std::cout << std::endl;
-  //   it++;
-  // }
-
 }
 
-std::unordered_map<std::string,std::string> calculateAllComparisonsOnevsAll(std::unordered_map<std::string, std::vector<int> > signaturesTrain, std::unordered_map<std::string, std::vector<int> > signaturesTest){
-  std::unordered_map<std::string, std::vector<int> >::iterator itTest = signaturesTest.begin();
+std::unordered_map<std::string,std::string> calculateAllComparisonsOnevsAll(std::unordered_map<std::string, std::vector<long> > signaturesTrain, std::unordered_map<std::string, std::vector<long> > signaturesTest){
+  std::unordered_map<std::string, std::vector<long> >::iterator itTest = signaturesTest.begin();
   std::unordered_map<std::string,std::string> result;
   for(itTest = signaturesTest.begin(); itTest!=signaturesTest.end(); itTest++){
     result.insert(calculateComparisonsOnevsAll(signaturesTrain, (*itTest)));
@@ -107,7 +80,7 @@ std::unordered_map<std::string,std::string> calculateAllComparisonsOnevsAll(std:
   return result;
 }
 
-std::pair<std::string,std::string> calculateComparisonsOnevsAll(std::unordered_map<std::string, std::vector<int> > signaturesTrain, std::pair<std::string, std::vector<int> > signatureToTest){
+std::pair<std::string,std::string> calculateComparisonsOnevsAll(std::unordered_map<std::string, std::vector<long> > signaturesTrain, std::pair<std::string, std::vector<long> > signatureToTest){
   /***
   * Return the first sequence name that have a great ressemblance with the one to test.
   *
@@ -116,13 +89,17 @@ std::pair<std::string,std::string> calculateComparisonsOnevsAll(std::unordered_m
   * signatureToTest : the signature of the sequence you want to compare to other
   */
 
-  std::unordered_map<std::string, std::vector<int> >::iterator itTrain = signaturesTrain.begin();
+  std::unordered_map<std::string, std::vector<long> >::iterator itTrain = signaturesTrain.begin();
   //std::unordered_map<std::string, std::vector<int> >::iterator itTest = signatureToTest.begin();
   float similarity = 0.0; //The buffer for the similarity result with each comparison.
+  //ADDED
+  float bestSimilarity = similarity; //The buffer to see the value of the best foud similarity
+  std::string bestResponse = ""; //The buffer for the best response name
+  // NOT ADDED
   std::string resultName = ""; //The name of the winner
   float count = 0.0; //The counter of same signature
-  std::vector<int> signatureTestSequence = signatureToTest.second; //The signature of your tested sequence
-  std::vector<int> signature2; //The signature of the next sequence to compare to your test sequence
+  std::vector<long> signatureTestSequence = signatureToTest.second; //The signature of your tested sequence
+  std::vector<long> signature2; //The signature of the next sequence to compare to your test sequence
 
   while( (itTrain != signaturesTrain.end()) && (similarity < THRESHOLD)){
     count = 0.0;
@@ -134,13 +111,19 @@ std::pair<std::string,std::string> calculateComparisonsOnevsAll(std::unordered_m
       }
     }
     similarity = count/float(NOMBRES_HASH);
+    //ADDED
+    if (similarity > bestSimilarity){
+      bestSimilarity = similarity;
+      bestResponse = resultName;
+    }
+    //NOT ADDED
     itTrain++;
   }
 
   if(itTrain == signaturesTrain.end()){
     resultName = "";
   }
-
+  std::cout << " Best similarity for "<< signatureToTest.first << ": " << bestSimilarity << " Wich correspond to " << bestResponse <<std::endl;
   return std::pair<std::string,std::string>(signatureToTest.first,resultName);
 }
 
@@ -254,7 +237,7 @@ std::set<std::uint32_t> shingling_a_document(std::string sequence){
     shingleTmp = sequence.substr(i,TAILLE_SHINGLES);
     const char * myString = shingleTmp.c_str();
     // We pass our shingle under a 32-bits integer with a CRC32
-    crc_result = CRC::Calculate(myString, sizeof(myString), CRC::CRC_32());
+    crc_result = CRC::Calculate(myString, TAILLE_SHINGLES, CRC::CRC_32());
 
     monSet.insert(crc_result);
   }
@@ -295,7 +278,7 @@ std::vector<int> pickRandomCoeffs(int k){
 
   std::vector<int> result; //Our end vector
   int randomTmp; //Our temporary random number
-  int max_shingle_id = pow(2.0,32.0) - 1.0;
+  int max_shingle_id = pow(2.0,31.0) - 1.0;
 
   //Set the seed and pass the first number beacause it's very predictable.
   srand (time(NULL));
@@ -317,7 +300,7 @@ std::vector<int> pickRandomCoeffs(int k){
   return result;
 }
 
-std::vector<int> minHashSignature(std::set<std::uint32_t> shingles, std::vector<int> coeffA, std::vector<int> coeffB){
+std::vector<long> minHashSignature(std::set<std::uint32_t> shingles, std::vector<int> coeffA, std::vector<int> coeffB){
   /***
   * return a vector containing all of the minHash signatures for the set of shingles passed in argument
   *
@@ -326,24 +309,24 @@ std::vector<int> minHashSignature(std::set<std::uint32_t> shingles, std::vector<
   * coeffB : Vector of coefficient to use to create hash functions
   */
 
-  std::vector<int> signature; //Our vector of signatures
+  std::vector<long> signature; //Our vector of signatures
   long nextPrime = 4294967311; //The next prime for a 32 bit integer (used in our hash functions)
 
   std::set<std::uint32_t>::iterator it = shingles.begin();
-  int hashCode; //our temporary HashCode
-  int minHashCode = nextPrime + 1; //the minimum hash code find for that Hash function
+  long hashCode; //our temporary HashCode
+  long minHashCode = -1; //the minimum hash code find for that Hash function
 
   for (int i = 0; i < NOMBRES_HASH; i++){
 
     it = shingles.begin();
-    minHashCode = nextPrime + 1;
+    minHashCode = -1;
 
     for(int j = 0; j < shingles.size(); j++){
       //Get the next hash code
-      hashCode = (coeffA[i] * (*it) + coeffB[i]) % nextPrime;
+      hashCode = (( (long)coeffA[i]) * (*it) + ((long)coeffB[i])) % nextPrime;
 
       //keep a track of the lowest hash code with that hash function
-      if(hashCode > minHashCode){
+      if((hashCode > minHashCode) || minHashCode == -1){
         minHashCode = hashCode;
       }
 
@@ -355,28 +338,28 @@ std::vector<int> minHashSignature(std::set<std::uint32_t> shingles, std::vector<
   return signature;
 }
 
-std::unordered_map<std::string, std::vector<int> > minHashSignatures(std::unordered_map<std::string, std::set<std::uint32_t> > shingles_map, std::vector<int> coeffA, std::vector<int> coeffB){
+std::unordered_map<std::string, std::vector<long> > minHashSignatures(std::unordered_map<std::string, std::set<std::uint32_t> > shingles_map, std::vector<int> coeffA, std::vector<int> coeffB){
   /***
   * Return a map of all the sequences with their minHash signatures
   *
   * shingles_map : the map of shingles sets with their name
   */
-  std::unordered_map<std::string, std::vector<int> > signatures;// Our map of minHash signatures
-  std::unordered_map<std::string, std::set<std::uint32_t> >::iterator it = shingles_map.begin();//our iterator over the map of shingles
+  std::unordered_map<std::string, std::vector<long> > signatures;// Our map of minHash signatures
+  std::unordered_map<std::string, std::set<uint32_t> >::iterator it = shingles_map.begin();//our iterator over the map of shingles
   //std::vector<int> coeffA = pickRandomCoeffs(NOMBRES_HASH);
   //std::vector<int> coeffB = pickRandomCoeffs(NOMBRES_HASH);
-  std::vector<int> signature; //Our buffer for the signature of each set of shingles
+  std::vector<long> signature; //Our buffer for the signature of each set of shingles
 
   for(int i = 0; i < shingles_map.size() ; i++){
     signature =  minHashSignature((*it).second, coeffA, coeffB);
-    signatures.insert(std::pair<std::string, std::vector<int> >((*it).first, signature));
+    signatures.insert(std::pair<std::string, std::vector<long> >((*it).first, signature));
     it++;
   }
 
   return signatures;
 }
 
-std::unordered_map<std::string, std::unordered_map<std::string, float> > calculateComparisonsAllvsAll (std::unordered_map<std::string, std::vector<int> > signatures){
+std::unordered_map<std::string, std::unordered_map<std::string, float> > calculateComparisonsAllvsAll (std::unordered_map<std::string, std::vector<std::uint32_t> > signatures){
   /***
   * Retturn the matrix of an all to all comparison using minHash signatures of sequences.
   *
@@ -385,11 +368,11 @@ std::unordered_map<std::string, std::unordered_map<std::string, float> > calcula
 
   std::unordered_map<std::string, std::unordered_map<std::string, float> > comparisons; //Our end result
   std::unordered_map<std::string, float> comparisonTmp;
-  std::vector<int> signature1; //The first shingle of the comparison
-  std::vector<int> signature2; //The second shingle of the comparison
+  std::vector<std::uint32_t> signature1; //The first shingle of the comparison
+  std::vector<std::uint32_t> signature2; //The second shingle of the comparison
   float count = 0.0; //the counter of equivalent minHash signatures.
-  std::unordered_map<std::string, std::vector<int> >::iterator it1 = signatures.begin();
-  std::unordered_map<std::string, std::vector<int> >::iterator it2;
+  std::unordered_map<std::string, std::vector<std::uint32_t> >::iterator it1 = signatures.begin();
+  std::unordered_map<std::string, std::vector<std::uint32_t> >::iterator it2;
 
   for (int i = 0; i < signatures.size()-1; i++){
     signature1 = (*it1).second;
