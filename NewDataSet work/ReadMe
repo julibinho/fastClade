@@ -1,0 +1,44 @@
+This folder gather the work on the new dataset.
+
+=> Things to know :
+
+-The seedNamePF0XXXX are file that contains the name of the family's proteines. It is used for the result processing.
+-The allseqNamePF0XXXX are file that contains the name of the query proteines of the specified family. (not used in this case)
+
+-The folders seedPF0XXXX contains all the sequence of the specified family.
+-The folders allseqPF0XXXX contains all the query sequence related to the specified family
+
+-The allseqName is a file that contain the name of all query proteines.
+-The allseq folder is a folder that contain the sequence of all the query proteins
+
+-The exploitResult software isn't optimised, and is very slow, even though it can be easily optimised to be fast. (I will do it if necessary)
+
+
+=> How to use the MinHash program on the new dataset :
+
+Goal : compare query sequence and seed sequence. We want that the query sequence of a specified family match the seed sequence of the same family while query sequences that aren't in the family doesn't match. 
+
+ 1) open the minHashNewData, and line 38 write the path of the Seedfamily folder to test. line 39, write the path of the query folder (that contain the sequence to test). 
+
+	Exemple : If i want to test the PF06777 family with all the query sequence :
+	  Line 38 : std::unordered_map<std::string,std::set<std::uint32_t> > shinglesTrain = shingling_documents("./split/seed/seedPF04857/");
+	  line 39 : std::unordered_map<std::string,std::set<std::uint32_t> > shinglesTest = shingling_documents("./split/test/allseq/");
+
+ 2) adjust the parameters, line 27,28,29 for the wanted test.
+
+ 3) compile and run while redirecting the output in a file.
+	exemple :
+	 compile : g++ -o output ./minHashNewData.cpp
+	 execute : ./output > result.txt
+
+ 4) Open exploitResult.sh
+	- Line 3, write the path of the seedNamePF0XXXX tested (if i follow my exemple, it would be : ./path/seedNamePF04857)
+	- Line 4, write the path of the allseqName, it should contain the name of the query proteine of the specified family tested (in the same exemple : ./path/allseqNamePF04857)
+	- Line 5, write the path of the MinHashNewData result.txt file path. (exemple : ./result.txt)
+
+ 5) Execute while redirect the output :
+	./exploitResults > exploitedResults.txt
+		
+	
+
+	 
