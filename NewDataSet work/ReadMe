@@ -5,16 +5,16 @@ This folder gather the work on the new dataset.
 The folders sequence are downloadble through the mail we sended.
 All the name file are downloadlbe through github at specified sections 
 
-(github) -The seedNamePF0XXXX are file that contains the name of the family's proteines. It is used for the result processing.
-(github) -The allseqNamePF0XXXX are file that contains the name of the query proteines of the specified family. (not used in this case)
+-The seedNamePF0XXXX are file that contains the name of the family's proteines. It is used for the result processing.
+-The allseqNamePF0XXXX are file that contains the name of the query proteines of the specified family. (not used in this case)
 
-( mail ) -The folders seedPF0XXXX contains all the sequence of the specified family.
-( mail ) -The folders allseqPF0XXXX contains all the query sequence related to the specified family
+-The folders seedPF0XXXX contains all the sequence of the specified family.
+-The folders allseqPF0XXXX contains all the query sequence related to the specified family
 
-(github) -The allseqName is a file that contain the name of all query proteines.
-( mail ) -The allseq folder is a folder that contain the sequence of all the query proteins
+-The allseqName is a file that contain the name of all query proteines.
+-The allseq folder is a folder that contain the sequence of all the query proteins
 
-(github) -The exploitResult software isn't optimised, and is very slow, even though it can be easily optimised to be fast. (I will do it if necessary)
+-The exploitResult software isn't optimised, and is very slow, even though it can be easily optimised to be fast. (I will optimise it soon)
 
 
 => How to use the MinHash program on the new dataset :
