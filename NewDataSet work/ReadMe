@@ -2,7 +2,7 @@ This folder gather the work on the new dataset.
 
 => Things to know :
 
-All data used are downloadble through the zip on github. 
+All data used are downloadble through the Formated Datas.zip on github. 
 
 -The seedNamePF0XXXX are file that contains the name of the family's proteines. It is used for the result processing.
 -The allseqNamePF0XXXX are file that contains the name of the query proteines of the specified family. (not used in this case)
