@@ -35,13 +35,13 @@ In the exemple, we compare all the sequence we have, with the PF0457 family.
 	 compile : g++ -o output ./minHashNewData.cpp
 	 execute : ./output > result.txt
 
- 4) Open exploitResult.sh
-	- Line 3, write the path of the seedNamePF0XXXX tested (if i follow my exemple, it would be : ./path/seedNamePF04857)
-	- Line 4, write the path of the allseqName, it should contain the name of the query proteine of the specified family tested (in the same exemple : ./path/allseqNamePF04857)
-	- Line 5, write the path of the MinHashNewData result.txt file path. (exemple : ./result.txt)
+ 4) Open exploitResultFast.py
+	- Line 20, write the path of the seedNamePF0XXXX tested (if i follow my exemple, it would be : ./path/seedNamePF04857)
+	- Line 21, write the path of the allseqName, it should contain the name of the query proteine of the specified family tested (in the same exemple : ./path/allseqNamePF04857)
+	- Line 22, write the path of the MinHashNewData result.txt file path. (exemple : ./result.txt)
 
  5) Execute while redirect the output :
-	./exploitResults > exploitedResults.txt
+	./exploitResultFast.py > exploitedResults.txt
 
 
 In the exploitedResults, there is everything to know on the analyse test
