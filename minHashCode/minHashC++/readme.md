@@ -5,9 +5,9 @@ This file contains functions that allow you to use a minHash algorithm on format
 A simple *make* should work but if not, you can change the *Makefile*.
 
 ### The format
-You need to have directory with fasta proteins formatted like this :\n
-\>*Protein name* \n
-*protein sequence* / *family name*\n
+You need to have directory with fasta proteins formatted like this :  
+\>*Protein name*  
+*protein sequence* / *family name*  
 
 The */* is used as a separator and is very important for that reason.
 
