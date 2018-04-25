@@ -15,7 +15,7 @@ float THRESHOLD_SUBSTITUTION;
 
 int main(int argc, char* argv[]){
 	if(argc != 5){
-		std::cout << "please use 5 arguments : The path to the directory, the shingles length, the number of hash and the path to the out file" << std::endl;
+		std::cout << "please use 4 arguments : The path to the directory, the shingles length, the number of hash and the path to the out file" << std::endl;
 		return 0;
 	}
 
@@ -29,6 +29,6 @@ int main(int argc, char* argv[]){
 	std::vector<int> coeffB = coeffs.second;
 	std::unordered_map<std::string, std::unordered_map<std::string,std::vector<long> > > dataMinHash = minHashSignatures(data,coeffA,coeffB);
 	writeDatabase(dataMinHash,coeffA,coeffB,argv[4]);
-	
+
 
 }
