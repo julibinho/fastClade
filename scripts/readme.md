@@ -34,3 +34,5 @@ If it's use twice on the same file, the changes will just be done once. No worry
 This script will draw the distribution of the result file you gave him. (Typically the result file gave by the minHash part of the project)
 
 It will draw the distribution of all the best intraFamily and ExtraFamily similarities in an histogram.
+
+You need to give him in the following order : The path to the result file, the path to the out file of the script and the number of bins you want in your histogram (30 gives already a good idea).
