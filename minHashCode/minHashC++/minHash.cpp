@@ -2,21 +2,7 @@
 #include<set>
 #include<vector>
 #include<cstdint> //Unsigned integers
-
 #include<iostream> //To write in the console
-// #include<time.h> //to get the execution time and a seed
-// #include<dirent.h> // to read files in a directory
-// #include<sys/types.h> //to read files in a directory
-// #include<unordered_map>
-// #include<set>
-// #include<vector>
-// #include<fstream>
-// #include"CRC.h" //Make the CRC
-// #include<iomanip>
-// #include<cstdint> //Unsigned integers
-// #include<stdlib.h> //Srand and rand
-// #include<algorithm> //find in a vector
-// #include<math.h> //pow function
 
 #include "shingles.h"
 
@@ -75,12 +61,6 @@ std::unordered_map<std::string, std::unordered_map<std::string,std::vector<long>
   std::unordered_map<std::string,std::set<std::uint32_t> >::iterator itProt; //Our iterator for each protein
   std::vector<long> signature; //Our buffer for the signature of each set of shingles
 
-  // for(int i = 0; i < shingles_map.size() ; i++){
-  //   signature =  minHashSignature((*it).second, coeffA, coeffB);
-  //   signatures.insert(std::pair<std::string, std::vector<long> >((*it).first, signature));
-  //   it++;
-  // }
-
   //for each family
   for(itFamily = shingles_map.begin(); itFamily != shingles_map.end();itFamily++){
     //we create that family
@@ -108,6 +88,5 @@ float minHashDistance(std::vector<long> protA, std::vector<long> protB){
       count++;
     }
   }
-  //std::cout << count/float(NOMBRES_HASH) << std::endl;
   return count/float(NOMBRES_HASH);
 }

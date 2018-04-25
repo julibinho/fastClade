@@ -4,21 +4,6 @@
 #include<vector>
 #include<cstdint> //Unsigned integers
 
-// #include<iostream> //To write in the console
-// #include<time.h> //to get the execution time and a seed
-// #include<dirent.h> // to read files in a directory
-// #include<sys/types.h> //to read files in a directory
-// #include<unordered_map>
-// #include<set>
-// #include<vector>
-// #include<fstream>
-// #include"CRC.h" //Make the CRC
-// #include<iomanip>
-// #include<cstdint> //Unsigned integers
-// #include<stdlib.h> //Srand and rand
-// #include<algorithm> //find in a vector
-// #include<math.h> //pow function
-
 #include"auxiliary.h"
 #include"shingles.h"
 #include"minHash.h"
@@ -27,47 +12,6 @@
 extern int TAILLE_SHINGLES;
 extern int NOMBRES_HASH;
 
-// static const int TAILLE_SHINGLES = 4;
-// static const int NOMBRES_HASH = 40;
-// static const float THRESHOLD = 0.3;
-// static const float THRESHOLD_SUBSTITUTION = 5;
-
-
-// int main(int argc, char* argv[]){
-//
-//   //TAILLE_SHINGLES = 5;
-//   //std::cout << TAILLE_SHINGLES << std::endl;
-//   if(argc != 6 ){
-//     std::cout << "Please use 6 arguments : train directory, test directory, shingles length, Number of hash functions and the threshold" << std::endl;
-//     return 0;
-//   }
-//
-//   TAILLE_SHINGLES = std::stoi(argv[3]);
-//   NOMBRES_HASH = std::stoi(argv[4]);
-//   THRESHOLD = std::stof(argv[5]);
-//
-//   std::unordered_map<std::string, std::unordered_map<std::string, std::set<std::uint32_t> > > protFamilyTrain = getProtByFamily(argv[1]);
-//   std::unordered_map<std::string, std::unordered_map<std::string, std::set<std::uint32_t> > > protFamilyTest = getProtByFamily(argv[2]);
-//
-//   //AJOUT minHash
-//   std::vector<int> coeffA = pickRandomCoeffs(NOMBRES_HASH);
-//   std::vector<int> coeffB = pickRandomCoeffs(NOMBRES_HASH);
-//   std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > > protFamilyTrainMinHash;
-//   for(std::unordered_map<std::string, std::unordered_map<std::string, std::set<std::uint32_t> > >::iterator itTrain = protFamilyTrain.begin(); itTrain != protFamilyTrain.end(); itTrain++){
-//     protFamilyTrainMinHash.insert(std::pair<std::string, std::unordered_map<std::string, std::vector<long> > >( (*itTrain).first , minHashSignatures((*itTrain).second,coeffA,coeffB)));
-//   }
-//
-//   std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > > protFamilyTestMinHash;
-//   for(std::unordered_map<std::string, std::unordered_map<std::string, std::set<std::uint32_t> > >::iterator itTest = protFamilyTest.begin(); itTest != protFamilyTest.end(); itTest++){
-//     protFamilyTestMinHash.insert(std::pair<std::string, std::unordered_map<std::string, std::vector<long> > >( (*itTest).first , minHashSignatures((*itTest).second,coeffA,coeffB)));
-//   }
-//   std::cout << "Fin création signature minHash " << std::endl;
-//   std::vector<std::pair<float,float> > finalResult = getDistributionsMinHash(protFamilyTrainMinHash,protFamilyTestMinHash);
-//   std::cout << "Resultats : " << std::endl;
-//   for(int i = 0;i<finalResult.size();i++){
-//     std::cout << finalResult[i].first << " " << finalResult[i].second << std::endl;
-//   }
-// }
 
 float minDistanceJaccardProts(std::unordered_map<std::string, std::set<std::uint32_t> > familyA, std::set<std::uint32_t> protToAnalyze){ //,std::unordered_map<std::string, std::set<std::uint32_t> > familyB){
   /**
@@ -82,7 +26,6 @@ float minDistanceJaccardProts(std::unordered_map<std::string, std::set<std::uint
     if (minDist == -1 || distance > minDist){
       minDist = distance;
     }
-    //}
   }
 
   return minDist;
@@ -98,13 +41,11 @@ std::pair<std::string,float> minDistanceMinHashProts(std::unordered_map<std::str
   std::string name;
 
   for(std::unordered_map<std::string, std::vector<long> >::iterator itA=familyA.begin(); itA != familyA.end(); itA++){
-    //for(std::unordered_map<std::string, std::set<std::uint32_t> >::iterator itB=familyB.begin(); itB != familyB.end(); itB++){
     distance = minHashDistance((*itA).second, protToAnalyze);
     if (minDist == -1 || distance > minDist){
       minDist = distance;
       name = (*itA).first;
     }
-    //}
   }
   std::pair<std::string,float> result = std::make_pair(name,minDist);
   return result;
@@ -123,7 +64,6 @@ std::vector<std::pair<float,float> > getDistributionsJaccard(std::unordered_map<
 
   // For every family in the test set
   for(std::unordered_map<std::string, std::unordered_map<std::string, std::set<std::uint32_t> > >::iterator itTest = testSet.begin(); itTest != testSet.end(); itTest++){
-    //tmpResult.first = minDistanceProts((*itTest).second,trainSet[(*itTest).first]);
     family = (*itTest).first;
 
     //For every member of this family
@@ -142,64 +82,14 @@ std::vector<std::pair<float,float> > getDistributionsJaccard(std::unordered_map<
       }
 
       tmpResult.second = minDist;
-      //std::cout << tmpResult.first << " " << tmpResult.second << std::endl;
       result.push_back(tmpResult);
     }
 
-    // tmpResult.second = minDist;
-    // std::cout << tmpResult.first << " " << tmpResult.second << std::endl;
-    // result.push_back(tmpResult);
   }
 
   return result;
 }
 
-
-// std::vector<std::pair<float,float> > getDistributionsMinHash(std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > > trainSet, std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > > testSet){
-//   /**
-//    * Return for each family the minimum jaccard similiraty intra-Family and extra-family
-//    */
-//
-//   std::vector<std::pair<std::pair<std::string,float>, std::pair<std::string,float> > > result;
-//   std::pair<float,float> tmpResult = std::pair<float,float>();
-//   float minDist = -1;
-//   float dist = 0;
-//   std::string family;
-//
-//   // For every family in the test set
-//   for(std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > >::iterator itTest = testSet.begin(); itTest != testSet.end(); itTest++){
-//     //tmpResult.first = minDistanceProts((*itTest).second,trainSet[(*itTest).first]);
-//     family = (*itTest).first;
-//
-//     //For every member of this family
-//     for(std::unordered_map<std::string, std::vector<long> >::iterator itMember = (*itTest).second.begin(); itMember != (*itTest).second.end(); itMember++){
-//       tmpResult = std::pair<float,float>();
-//       tmpResult.first = minDistanceMinHashProts(trainSet[family],(*itMember).second);//(*itTest).second,trainSet[(*itTest).first]);
-//
-//       minDist = -1;
-//       for(std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > >::iterator itTrain = trainSet.begin(); itTrain != trainSet.end(); itTrain++){
-//         if((*itTrain).first != family){
-//           dist = minDistanceMinHashProts((*itTrain).second,(*itMember).second);
-//           if (minDist == -1 || dist>minDist){
-//             minDist = dist;
-//           }
-//         }
-//       }
-//
-//       tmpResult.second = minDist;
-//       //std::cout << tmpResult.first << " " << tmpResult.second << std::endl;
-//       result.push_back(tmpResult);
-//     }
-//
-//     // tmpResult.second = minDist;
-//     // std::cout << tmpResult.first << " " << tmpResult.second << std::endl;
-//     // result.push_back(tmpResult);
-//   }
-//
-//   return result;
-// }
-
-/**************************************************/
 
 std::unordered_map<std::string,std::pair<std::pair<std::string,float>,std::pair<std::string,float> > > getDistributionsMinHash(std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > > trainSet, std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > > testSet){
   /**
@@ -207,8 +97,6 @@ std::unordered_map<std::string,std::pair<std::pair<std::string,float>,std::pair<
    * trainSet : the set composed of train examples
    * testSet : the set to analyze
    */
-
-
 
    std::unordered_map<std::string,std::pair<std::pair<std::string,float>,std::pair<std::string,float> > > result;
    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<long> > >::iterator itTest;
@@ -249,7 +137,7 @@ std::unordered_map<std::string,std::pair<std::pair<std::string,float>,std::pair<
    }
    return result;
 }
-/**************************************************/
+
 
 float jaccardSim(std::set<std::uint32_t> setA, std::set<std::uint32_t> setB){
   /**
@@ -260,15 +148,12 @@ float jaccardSim(std::set<std::uint32_t> setA, std::set<std::uint32_t> setB){
 
   //float similarity; //Our end result
   int sizeSetA = setA.size();
-  //std::cout << sizeSetA << std::endl;
-  //std::set<std::uint32_t> globalSet; //the global set that will contain the union between setA and setB
 
   // We merge the two set into one global set
   for(std::set<std::uint32_t>::iterator it = setB.begin(); it != setB.end();it++){
     setA.insert((*it));
   }
-  //std::cout << (sizeSetA + setB.size() - setA.size()) / setA.size() << std::endl;
-  //std::cout << (float(sizeSetA) + float(setB.size()) - float(setA.size())) /  float(setA.size()) << std::endl;
+
   return (float(sizeSetA) + float(setB.size()) - float(setA.size())) /  float(setA.size());
 
 }

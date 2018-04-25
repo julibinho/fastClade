@@ -13,7 +13,6 @@
 int TAILLE_SHINGLES;
 int NOMBRES_HASH;
 float THRESHOLD;
-float THRESHOLD_SUBSTITUTION;
 
 int main(int argc, char* argv[]){
 

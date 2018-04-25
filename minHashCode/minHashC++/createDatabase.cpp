@@ -10,8 +10,6 @@
 
 int TAILLE_SHINGLES;
 int NOMBRES_HASH;
-float THRESHOLD;
-float THRESHOLD_SUBSTITUTION;
 
 int main(int argc, char* argv[]){
 	if(argc != 5){
@@ -21,7 +19,6 @@ int main(int argc, char* argv[]){
 
 	TAILLE_SHINGLES = std::stoi(argv[2]);
 	NOMBRES_HASH = std::stoi(argv[3]);
-	//THRESHOLD = std::stof(argv[4]);
 
 	std::unordered_map<std::string,std::unordered_map<std::string,std::set<std::uint32_t> > > data = shingling_documents(argv[1]);
 	std::pair<std::vector<int>,std::vector<int> > coeffs = pickRandomCoeffs(NOMBRES_HASH);

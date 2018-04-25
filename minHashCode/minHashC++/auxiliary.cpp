@@ -90,12 +90,6 @@ std::pair<std::vector<int>,std::vector<int> > pickRandomCoeffs(int k){
 
     //Generating the number
     randomTmp = rand() % max_shingle_id;
-
-    //While we have already picked this number
-    // while(std::find(result.begin(), result.end(), randomTmp) != result.end()){
-    //   randomTmp = rand() % max_shingle_id;
-    // }
-
     resultA.push_back(randomTmp);
 
     randomTmp = rand() % max_shingle_id;
@@ -110,12 +104,8 @@ int writeDatabase(std::unordered_map<std::string, std::unordered_map<std::string
   /**
    * Write in the file given in argument the minHash database given in signatures
    * signatures : A set of protein categorized by family and associated with their minHah signature
-   * filePath: The path wher you want to wrote the database
+   * filePath: The path where you want to write the database
    */
-
-   // if((filePath.size() > 0) && filePath[filePath.size()-1] != '/'){
-   //   filePath += '/';
-   // }
 
    //Our iterators
    std::unordered_map<std::string, std::unordered_map<std::string,std::vector<long> > >::iterator itFamily;
@@ -206,10 +196,7 @@ std::unordered_map<std::string, std::unordered_map<std::string,std::vector<long>
 
          else{
            splitLine = splitString(line,"\t");
-           //std::cout << line << std::endl;
            name = splitLine[0];
-
-           //std::cout << splitLine.size();
 
            for(int i = 1;i<splitLine.size();i++){
              signatureTmp.push_back(std::stol(splitLine[i]));
