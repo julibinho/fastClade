@@ -1,4 +1,4 @@
-### First scripts
+### How to use the PSI-BLAST on a DataBase
 
 How to uses thoses multiples scripts to compare query sequence with pssm data base :
 
@@ -21,18 +21,79 @@ How to uses thoses multiples scripts to compare query sequence with pssm data ba
 ### Useful scripts to use with minHashing
 
 #### create_test_train_directories.py
-This script allow you to take a directory full of fastas file and two lists, one that give all the fastas that should be in the train directory and another that do the same thing for the test directory.
+This script allow you to separate the Train and Test fasta present in the fasta directory with the help of two lists.
+
+Input : 
+	- The Fasta Folder that contain all the fasta file (separated)
+	- The Train List ( under the format : <ProtName> <ProtFamily> )
+	- The Test List ( under the format : <ProtName> <ProtFamily> )
+	
+Exemple of use :
+	python create_test_train_directories.py FastaFolder SeedList TestList 
+
+Output :
+The output will be 2 new folder in the FastaFolder named "test" and "train"
+
+Note : The fastas will only be copied from the FastaFolder to the folder test and train. So, think about copy your fasta folder before
+
+
 
 #### formatFasta.py
-This script allow you to format fastas files so that they match the required format of the minHashCode part in c++
+This script allow you to format fastas file to use the MinHash program.
 
-You just have to give it the file with the fasta you want to format and a file that give the correspondence between the name of the fasta and the family it should be associated with.
+The format that MinHash requires is :
+>Name
+SEQUENCE/Family
 
-If it's use twice on the same file, the changes will just be done once. No worry if some of the fastas in the directory are already formatted.
+Exemple :
+>d1a3pa_
+PGPSSYDGYCLNGGVMHIESLDSYTCNCVIGYSGDRCQTRDL/g.3
+
+Input :
+	- A List ( under the format : <ProtName> <...> <ProtFamily> ). The program will for each Protein in the list, add, if it exist in the folder, the family specified in the list.
+	- A FastaFolder that contain all the separated fasta file to format.
+	- A number that indicate the collumn where is the ProtFamily (start at one)
+
+Option :
+	- As a 4th argument : if your file havn't the .fasta extension, you can renseign it's extension Here (by default it's .fasta)
+
+
+Exemple of use :
+	python formatFasta.py ListFamily FastaFolder 3
+
+Exemple of Use with 4th option :
+	python formatFasta.py ListFamily FastaFolder 3 .fsa
+
+Output :
+All the fasta specified in the list will be modified and added with their correct family name directly from the folder.
+
+Note : If a fasta already contain a "/" in their sequence ( If it's in the name, it's OK ) won't be modified again.
+
+#### formatFastaWOList.py
+The aim of this script is the same as formatFasta : format fasta file to use the MinHash program.
+
+Input :
+	- FastaDirectory that contain the all the separated fasta file to format.
+	- A family (under the form of a char String)
+
+Exemple of use:
+	python formatFastaWOList.py FastaFolder PF06777
+
+Output :
+All the fasta in the folder will be added by "/String" at their end.
+
+
 
 #### DistributionPlot.py
-This script will draw the distribution of the result file you gave him. (Typically the result file gave by the minHash part of the project)
+It will draw the distribution of all the best intraFamily and ExtraFamily similarities in an histogram with a MinHash result file
+Input :
+	- ResultFile : the MinHash result file
+	- Output : the Name of the histogram file
+	- Number of Bins : Integer that is used to scale the histogram (usualy 30/35 is good)
 
-It will draw the distribution of all the best intraFamily and ExtraFamily similarities in an histogram.
+Exemple of use :
+	python DistributionPlot.py MinHashResult Graph 30
 
-You need to give him in the following order : The path to the result file, the path to the out file of the script and the number of bins you want in your histogram (30 gives already a good idea).
+Output : 
+in this case, an histogram named Graph.
+	
