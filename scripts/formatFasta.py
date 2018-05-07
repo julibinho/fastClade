@@ -23,16 +23,17 @@ def remplacageFasta(pathToRead,family):
         sequence += line
     sequence = sequence[:-1]
     
-    if not sequence.find('/'):
-        sequence += "/"+family
-        flux.close()
+    #if not sequence.find('/'):
+    #print('youpi !')
+    sequence += "/"+family
+    flux.close()
     
-        flux = open(pathToRead,'w')
-        flux.write(sequence)
-        flux.close()
+    flux = open(pathToRead,'w')
+    flux.write(sequence)
+    flux.close()
     
-    else:
-        flux.close()
+    #else:
+ #       flux.close()
 
 #Get all the name and family in a map
 # Indexes will be family and contents a list of sequence in the family
