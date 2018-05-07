@@ -1,0 +1,83 @@
+
+
+#This script is used to automatise the comparaison and the Result output for a well formated protein query folder, and a well formated protein seed folder.
+
+int_test='^[0-9]+$'
+
+
+if [ "$1" == "-S" ] && [ -n "$2" ] && [ -d "$2" ] ; then SeedDirectoryCheck=true ;  fi
+
+if [ "$3" == "-Q" ] && [ -n "$4" ] && [ -d "$4" ] ; then QueryDirectoryCheck=true ; fi
+
+if [ "$5" == "-T" ] && [[ "$6" =~ $int_test ]] ; then TCheck=true ; fi
+
+if [ "$7" == "-N" ] && [[ "$8" =~ $int_test ]] ; then NCheck=true ; fi
+
+
+echo $SeedDirectoryCheck $QueryDirectoryCheck $TCheck $NCheck
+
+if [ "$SeedDirectoryCheck" == true ] && [ "$QueryDirectoryCheck" == true ] && [ "$TCheck" == true ] && [ "$NCheck" == true ] ;
+	then 
+	start=$SECONDS
+	SeedFolder=$2 #    "./allSeedFormated"
+	QueryFolder=$4 #"./allseqFormated"
+	ShingleLength=$6 #2
+	NumberHash=$8 #2000
+	
+	n1=`basename SeedFolder`
+	n2=`basename QueryFolder`
+
+	dir=$n1-$n2-$ShingleLength-$NumberHash
+
+	mkdir ./$dir
+	echo "start of SeedDatabase Creation"
+	./createDatabase $SeedFolder $ShingleLength $NumberHash ./$dir/SeedDataBase
+	duration=$((SECONDS - start))
+	echo "Seed shingling done in $duration second(s)"
+	#echo "Seed shingling done in $duration second(s)" > ./$dir/LogComparaison
+
+	start=$SECONDS
+	./testDatabase ./$dir/SeedDataBase $QueryFolder ./$dir/comparaison
+	duration2=$((SECONDS-START))	
+	echo "Query shingling + Comparaison done in $duration2 second(s)"
+	#echo "Query shingling + Comparaison done in $duration2 second(s)" >> ./$dir/LogComparaison
+
+	total=$((duration+duration2))
+	echo "total comparaison done in $total second(s)"
+	#echo "total comparaison done in $total second(s)" >> ./$dir/LogComparaison
+	echo "$total s" >> ./$dir/LogComparaison
+
+	touch ./$dir/TrueResults
+	touch ./$dir/FalseResults
+
+	python ResultRead.py $SeedFolder $QueryFolder ./$dir/comparaison ./$dir/TrueResults ./$dir/FalseResults
+	python ResultReadOutputFormated.py $SeedFolder $QueryFolder ./$dir/comparaison ./$dir/TrueResults ./$dir/FalseResults >> ./$dir/LogComparaison
+
+else 
+	if [ "$SeedDirectoryCheck" != true ] && [ "$#" != "0" ] && [ "$1" != "-help" ] ; then echo "Folder Seed Path incorrect. Type \"-help\" for more informations" ;  fi	
+	if [ "$QueryDirectoryCheck" != true ] && [ "$#" != "0" ] && [ "$1" != "-help" ] ; then echo "Folder Query Path incorrect. Type \"-help\" for more informations" ;  fi 	
+	if [ "$TCheck" != true ] && [ "$#" != "0" ] && [ "$1" != "-help" ] ; then echo "Length of shingle incorrect. Type \"-help\" for more informations" ;  fi 
+	if [ "$NCheck" != true ] && [ "$#" != "0" ] && [ "$1" != "-help" ] ; then echo "Number of Hash incorrect. Type \"-help\" for more informations" ;  fi
+
+fi;
+	
+if [ "$#" == "0" ] || [ "$1" == "-help" ] ; then echo "
+This bash script is used to automatise the comparaison and the Result output for a well formated protein query folder, and a well formated protein seed folder.
+
+To work, the 
+
+The first argument -S must be the folder of well formated Seed protein.
+the second argument -Q must be the folder of well formated Query Protein. 
+The third argument -T specifies the length of the shingles.
+The fourth argument -N specifie the number of Hash 
+
+Typical usage of the script :
+./BashDoAll.sh -S ./allSeedFormated -Q ./allseqFormated -T 3 -N 2000" ; fi
+#This script is used to automatise the comparaison and the Result output for a well formated protein query folder, and a well formated protein seed folder.
+
+##CALCULER LE TEMPS
+#
+
+#python ResultRead.py $SeedFolder $QueryFolder result.txt
+
+
