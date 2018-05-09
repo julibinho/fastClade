@@ -50,9 +50,11 @@ fi ;
 if [ "$#" == "0" ] || [ "$1" == "-help" ] ; then echo "
 This bash script is used for the comparaison all to all of a concatenation of fastas file with a pssm folder.
 It first format the concatenation of the fastas file to allow the comparaison, then it compares and create a log file named \"BLASTCompare.log\" for warning and error in the current folder.
-The first argument -i must be the concatenation of fastas.
+
+he first argument -i must be the concatenation of fastas.
 the second argument -p must be the folder that contain all the pssm models. 
 The third argument -o specifies the output file, the output name should not already exist.
 The fourth argument -f specifie the output format. 
+
 Typical usage of the script :
 ./comparaison.sh -i concat_fasta -p pssmModels -o all_to_all_comparaison -f 6" ; fi
