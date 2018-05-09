@@ -85,18 +85,12 @@ std::unordered_map<std::string, std::vector<long> > minHashSignaturesComparisons
   * shingles_map : the map of shingles sets with their name
   */
   std::unordered_map<std::string,std::vector<long> > signatures;// Our map of minHash signatures
-  //std::unordered_map<std::string,std::set<std::uint32_t> >::iterator itFamily = shingles_map.begin();//our iterator over the map of shingles family
 
   std::unordered_map<std::string,std::set<std::uint32_t> >::iterator itProt; //Our iterator for each protein
   std::vector<long> signature; //Our buffer for the signature of each set of shingles
 
-  //for each family
-  //for(itFamily = shingles_map.begin(); itFamily != shingles_map.end();itFamily++){
-    //we create that family
-    //std::string family = (*itFamily).first;
-    //signatures.insert(std::pair<std::string, std::unordered_map<std::string,std::vector<long> > >(family, std::unordered_map<std::string,std::vector<long> >()));
 
-    //for each protein
+  //for each protein
   for(itProt = shingles_map.begin(); itProt != shingles_map.end(); itProt++){
     signature =  minHashSignature((*itProt).second, coeffA, coeffB);
     signatures.insert(std::pair<std::string, std::vector<long> >((*itProt).first, signature));

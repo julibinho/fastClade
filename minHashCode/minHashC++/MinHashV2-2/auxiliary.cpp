@@ -221,23 +221,12 @@ int writeResultDistribution(std::unordered_map<std::string,std::pair<std::string
 
   std::ofstream myFile(pathToWrite);
   std::unordered_map<std::string,std::pair<std::string,std::string> >::iterator it;
-  //std::string name;
-  //std::string bestBet;
-  //float similIntraFamily;
-  //float similExtraFamily;
 
   if(myFile.is_open()){
     for(it = dataComparisons.begin(); it != dataComparisons.end(); it++){
       std::string name = (*it).first;
       std::string family = (*it).second.first;
       std::string bestBet = (*it).second.second;
-
-      // if(similIntraFamily >= similExtraFamily){
-      //   bestBet = (*it).second.first.first;
-      // }
-      // else{
-      //   bestBet = (*it).second.second.first;
-      // }
 
       myFile << name << "\t" << bestBet << "\t" << family << "\n";
     }

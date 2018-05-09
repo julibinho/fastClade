@@ -117,16 +117,6 @@ std::unordered_map<std::string,std::set<std::uint32_t> > shingling_documents_com
         sequence += line.substr(0,line.size());
       }
 
-      // We get the sequence and the family associated
-      // std::vector<std::string> sequenceSplit = splitString(sequence,"/");
-      // sequence = sequenceSplit[0];
-      // std::string family = sequenceSplit[1];
-
-      // //If the family doesn't exists, we create it
-      // if(resultat.find(family) == resultat.end()){
-      //   resultat.insert(std::pair<std::string,std::unordered_map<std::string,std::set<std::uint32_t> > >(family,std::unordered_map<std::string,std::set<std::uint32_t> >()));
-      // }
-
       resultat.insert(std::pair<std::string,std::set<std::uint32_t> >(nom,shingling_a_document(sequence)));
 
       myFile.close();
