@@ -1,1 +1,62 @@
+##############################################
+#### create_test_train_directories.py
+This script allow you to separate the Train and Test fasta present in the fasta directory with the help of two lists.
 
+Input : 
+	- The Fasta Folder that contain all the fasta file (separated)
+	- The Train List ( under the format : <ProtName> <ProtFamily> )
+	- The Test List ( under the format : <ProtName> <ProtFamily> )
+	
+Exemple of use :
+	python create_test_train_directories.py FastaFolder SeedList TestList 
+
+Output :
+The output will be 2 new folder in the FastaFolder named "test" and "train"
+
+Note : The fastas will only be copied from the FastaFolder to the folder test and train. So, think about copy your fasta folder before
+
+
+
+#### formatFasta.py
+This script allow you to format fastas file to use the MinHash program.
+
+The format that MinHash requires is :
+>Name
+SEQUENCE/Family
+
+Exemple :
+>d1a3pa_
+PGPSSYDGYCLNGGVMHIESLDSYTCNCVIGYSGDRCQTRDL/g.3
+
+Input :
+	- A List ( under the format : <ProtName> <...> <ProtFamily> ). The program will for each Protein in the list, add, if it exist in the folder, the family specified in the list.
+	- A FastaFolder that contain all the separated fasta file to format.
+	- A number that indicate the collumn where is the ProtFamily (start at one)
+
+Option :
+	- As a 4th argument : if your file havn't the .fasta extension, you can renseign it's extension Here (by default it's .fasta)
+
+
+Exemple of use :
+	python formatFasta.py ListFamily FastaFolder 3
+
+Exemple of Use with 4th option :
+	python formatFasta.py ListFamily FastaFolder 3 .fsa
+
+Output :
+All the fasta specified in the list will be modified and added with their correct family name directly from the folder.
+
+Note : If a fasta already contain a "/" in their sequence ( If it's in the name, it's OK ) won't be modified again.
+
+#### formatFastaWOList.py
+The aim of this script is the same as formatFasta : format fasta file to use the MinHash program.
+
+Input :
+	- FastaDirectory that contain the all the separated fasta file to format.
+	- A family (under the form of a char String)
+
+Exemple of use:
+	python formatFastaWOList.py FastaFolder PF06777
+
+Output :
+All the fasta in the folder will be added by "/String" at their end.
